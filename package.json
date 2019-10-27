@@ -7,7 +7,6 @@
     "start": "start chrome http://localhost:3000/ && node src/app.js",
     "dev": "start chrome http://localhost:3000/ && nodemon src/app.js"
   },
-
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alanlucki/demo_nodejs_crud.git"

@@ -1,0 +1,4 @@
+npm i nodemon -D    'inicializar en otra dependencia'
+npm run dev         'ejecutar como desarrollador'
+npm init --yes      'inicializar el package.json'
+npm install         'instala el package.json'
