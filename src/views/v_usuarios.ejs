@@ -62,13 +62,15 @@
                 </button>
             </div>
             <div class="col-xs-2">
-                <button id="btnLimpiar" class="btn btn-block btn-warning">
-                    Limpiar
+                <button id="btnLimpiar" class="btn btn-block btn-success">
+                    Nuevo
                 </button>
             </div>
         </div>
     </div>
 </div>
+
+<div id="divMensaje">&nbsp;</div>
 
 <br>
 <div id="gridContainer"></div>
@@ -77,158 +79,11 @@
 
     $(function () {
 
-        $('#txtId').attr('disabled','disabled'); 
-        $('#txtCodigo').attr('disabled','disabled'); 
-        
-        $("#gridContainer").dxDataGrid({
-            columns: [
-                { dataField: 'id', visible: false },
-                { dataField: 'codigo' },
-                { dataField: 'nombre', sortOrder: "asc" },
-                { dataField: 'apellido' },
-                { dataField: 'email' }
-            ],
-            groupPanel: { visible: true },
-            grouping: { autoExpandAll: false },
-            loadPanel: { enabled: true },
-            allowColumnReordering: true,
-            allowColumnResizing: true,
-            columnResizingMode: ["nextColumn"][0],
-            columnChooser: { enabled: true },
-            filterPanel: { visible: true },
-            selection: { mode: ["single", "multiple"][0] },
-            sorting: { mode: "single" },
-            paging: { pageSize: 10 },
-            pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 25, 50, 100, 1000] },
-            showColumnLines: true,
-            showRowLines: true,
-            showBorders: true,
-            export: { enabled: true, fileName: "DataGrid " },
-            filterRow: { visible: true, applyFilter: 'onClick' },
-            onCellPrepared: function (options) {
-                /*
-                if (options.rowIndex === undefined) {
-                    if (options.cellElement.attr('role') === 'columnheader') {
-                        options.cellElement.css("color", "white");
-                        options.cellElement.css("background-color", "#2D345B");
-                        options.cellElement.css("text-align", "center");
-                        options.cellElement.addClass("ff-Calibri");
-                    }
-                } else {
-                    if (options.columnIndex === 1) {
-                        options.cellElement.addClass("ff-Calibri");
-                    } else {
-                        options.cellElement.addClass("ff-consolas");
-                    }
-                }
-                */
-            },
-            onEditorPreparing: function (e) {
-                if (e.parentType === 'filterRow') {
-                    e.editorOptions.onEnterKey = function (arg) {
-                        e.element.find('.dx-apply-button').trigger('dxclick');
-                    };
-                }
-            },
-            onToolbarPreparing: function (e) {
-
-            },
-            onRowPrepared: function (e) {
-
-                if (e.rowType === 'totalFooter') {
-                    e.rowElement.addClass('dx-column-lines');
-                }
-
-            },
-
-            onContentReady: function (e) {
-
-                e.element.find('.dx-datagrid-total-footer').find('.dx-datagrid-content').removeClass('dx-datagrid-content');
-
-                if (e.component.shouldSkipNextReady) {
-                    e.component.shouldSkipNextReady = false;
-                } else {
-                    e.component.shouldSkipNextReady = true;
-                    e.component.columnOption("command:select", "width", 40);
-                    e.component.updateDimensions();
-                }
-            },
-            onSelectionChanged: function (e) {
-                if (e.selectedRowsData.length !== 0) {
-                    var data = e.selectedRowsData;
-                    
-                    console.log( data[0] );
-                    
-                    $('#txtId').val(data[0]._id);
-                    $('#txtCodigo').val(data[0].codigo);
-                    $('#txtNombre').val(data[0].nombre);
-                    $('#txtApellido').val(data[0].apellido);
-                    $('#txtEmail').val(data[0].email);
-                                        
-                }
-
-            }
-        });
-
-        $.ajax({
-            url: "http://localhost:3000/usuario/toList",
-            async: true,
-            success: function (result) {
-                var usuarios = JSON.stringify(result['usuarios']);
-
-                $(function () {
-                    $("#gridContainer").dxDataGrid({
-                        dataSource: JSON.parse(usuarios)
-                    });
-                });
-            },
-            error: function (e) {
-                console.error(e);
-            },
-            timeout: 0
-        });
-
-        $('#btnGrabar').click(() => {
-
-            var usuario = {
-                'codigo': $('#txtCodigo').val(),
-                'nombre': $('#txtNombre').val(),
-                'apellido': $('#txtApellido').val(),
-                'email': $('#txtEmail').val()
-            };
-
-            var v_url = "";
-
-            if( $('#txtCodigo').val().trim() === '' ){
-                v_url = "http://localhost:3000/usuario/created";
-            }else{
-                v_url = "http://localhost:3000/usuario/update";
-            }
-
-            $.ajax({
-                url: v_url,
-                async: true,
-                data: usuario,
-                success: function (result) {
-                    var usuarios = JSON.stringify(result['usuarios']);
-
-                    $(function () {
-                        $("#gridContainer").dxDataGrid({
-                            dataSource: JSON.parse(usuarios)
-                        });
-                    });
-                },
-                error: function (e) {
-                    console.error(e);
-                },
-                timeout: 0
-            });
-
-            $('#btnLimpiar').click();
-
-        });
-
-        $('#btnEliminar').click(() => {
+        var urlorigin = window.location.origin;
+        var listarAhora = () => {
+            listar(urlorigin + "/usuario/toList" , 'gridContainer' , 'usuarios' );
+        };
+        var leerFormulario = () => {
             var usuario = {
                 '_id': $('#txtId').val(),
                 'codigo': $('#txtCodigo').val(),
@@ -236,36 +91,84 @@
                 'apellido': $('#txtApellido').val(),
                 'email': $('#txtEmail').val()
             };
+            return usuario;
+        };
+        var inicio = () => {
 
-            $.ajax({
-                url: "http://localhost:3000/usuario/delete",
-                async: true,
-                data: usuario,
-                success: function (result) {
-                    var usuarios = JSON.stringify(result['usuarios']);
+            $('#txtId').attr('disabled', 'disabled');
+            $('#txtCodigo').attr('disabled', 'disabled');
 
-                    $(function () {
-                        $("#gridContainer").dxDataGrid({
-                            dataSource: JSON.parse(usuarios)
-                        });
-                    });
-                },
-                error: function (e) {
-                    console.error(e);
-                },
-                timeout: 0
+            $("#gridContainer").dxDataGrid(dxDataGridModelo);
+            $("#gridContainer").dxDataGrid({
+                columns: [
+                    { dataField: 'id', visible: false },
+                    { dataField: 'codigo' },
+                    { dataField: 'nombre', sortOrder: "asc" },
+                    { dataField: 'apellido' },
+                    { dataField: 'email' }
+                ],
+                onSelectionChanged: function (e) {
+                    if (e.selectedRowsData.length !== 0) {
+                        var data = e.selectedRowsData;
+                        console.log(data[0]);
+                        $('#txtId').val(data[0]._id);
+                        $('#txtCodigo').val(data[0].codigo);
+                        $('#txtNombre').val(data[0].nombre);
+                        $('#txtApellido').val(data[0].apellido);
+                        $('#txtEmail').val(data[0].email);
+                    }
+                }
             });
 
-            $('#btnLimpiar').click();
-        });
+            listarAhora();
 
-        $('#btnLimpiar').click(() => {
-            $('#txtCodigo').val('');
-            $('#txtNombre').val('');
-            $('#txtApellido').val('');
-            $('#txtEmail').val('');
-            $('#txtNombre').focus();
-        });
+        };
+        var eventos = () => {
+            $('#btnGrabar').click(async () => {
+
+                var usuario = leerFormulario();
+                var v_url = "";
+
+                if ($('#txtCodigo').val().trim() === '') {
+
+                    v_url = urlorigin + "/usuario/created";
+                    grabar(v_url, usuario, listarAhora, 'divMensaje' );
+
+                } else {
+
+                    v_url = urlorigin + "/usuario/update";
+                    var opcion = confirm("¿Seguro que desea modificar?");
+                    if (opcion == true) {
+                        grabar(v_url, usuario, listarAhora, 'divMensaje' );
+                    }
+
+                }
+
+            });
+            $('#btnEliminar').click(() => {
+
+                var usuario = leerFormulario();
+                var opcion = confirm("¿Seguro que desea eliminar?");
+                if (opcion == true) {
+                    grabar(urlorigin + "/usuario/delete", usuario, listarAhora , 'divMensaje' );
+                }
+
+            });
+            $('#btnLimpiar').click(() => {
+                $('#txtCodigo').val('');
+                $('#txtNombre').val('');
+                $('#txtApellido').val('');
+                $('#txtEmail').val('');
+                $('#txtNombre').focus();
+            });
+
+        };
+
+        //
+        
+        inicio();
+        eventos();
+
     });
 
 </script>
