@@ -85,7 +85,7 @@ const navegar = (p00, p01) => {
 
 const dxDataGridModelo = {
 
-    groupPanel: { visible: true },
+    //groupPanel: { visible: true },
     grouping: { autoExpandAll: false },
     loadPanel: { enabled: true },
     allowColumnReordering: true,
@@ -95,7 +95,7 @@ const dxDataGridModelo = {
     filterPanel: { visible: true },
     selection: { mode: ["single", "multiple"][0] },
     sorting: { mode: "single" },
-    paging: { pageSize: 10 },
+    paging: { pageSize: 5 },
     pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 25, 50, 100, 1000] },
     showColumnLines: true,
     showRowLines: true,

@@ -29,6 +29,12 @@ router.get('/v_usuarios', async (req, res) => {
 
 });
 
+router.get('/v_usuarios_tipo', async (req, res) => {
+
+    res.render('v_usuarios_tipo', null);
+
+});
+
 
 router.get('*', async (req, res) => {
 

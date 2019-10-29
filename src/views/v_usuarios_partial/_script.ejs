@@ -8,6 +8,12 @@
 
         };
 
+        let listarAhoraTipoUsuarios = () => {
+
+            listar("/usuario_tipo/toList", 'gridListadoTipo', 'usuario_tipos');
+
+        };
+
         let leerFormulario = () => {
 
             let usuario = {
@@ -16,7 +22,8 @@
                 'codigo': $('#txtCodigo').val(),
                 'nombre': $('#txtNombre').val(),
                 'apellido': $('#txtApellido').val(),
-                'email': $('#txtEmail').val()
+                'email': $('#txtEmail').val(),
+                'usuario_tipo': $('#txtTipoId').val()
 
             };
 
@@ -28,6 +35,9 @@
 
             $('#txtId').attr('disabled', 'disabled');
             $('#txtCodigo').attr('disabled', 'disabled');
+            $('#txtTipoCodigo').attr('disabled', 'disabled');
+            $('#txtTipoDescripcion').attr('disabled', 'disabled');
+            $('#txtNombre').focus();
 
             $("#gridContainer").dxDataGrid(dxDataGridModelo);
             $("#gridContainer").dxDataGrid({
@@ -35,10 +45,12 @@
                 columns: [
 
                     { dataField: 'id', visible: false },
-                    { dataField: 'codigo', dataType: "number", sortOrder: "desc" },
+                    { caption: 'Código', dataField: 'codigo', dataType: "number", sortOrder: "desc", width: 80 },
                     { dataField: 'nombre' },
                     { dataField: 'apellido' },
-                    { dataField: 'email' }
+                    { dataField: 'email' },
+                    { caption: 'Tipo', dataField: 'usuario_tipo' }
+
 
                 ],
                 onSelectionChanged: (e) => {
@@ -52,6 +64,36 @@
                         $('#txtNombre').val(data[0].nombre);
                         $('#txtApellido').val(data[0].apellido);
                         $('#txtEmail').val(data[0].email);
+                        
+                        //$('#txtTipoCodigo').val(data[0].usuario_tipo);
+                        //$('#txtTipoCodigo').attr('disabled', 'disabled');
+                        //$('#txtTipoDescripcion').attr('disabled', 'disabled');
+
+                    }
+
+                }
+            });
+
+
+            $("#gridListadoTipo").dxDataGrid(dxDataGridModelo);
+            $("#gridListadoTipo").dxDataGrid({
+
+                columns: [
+
+                    { dataField: 'id', visible: false },
+                    { caption: 'Código', dataField: 'codigo', dataType: "number", sortOrder: "desc", width: 80 },
+                    { caption: 'Descripción', dataField: 'descripcion' }
+                ],
+                onSelectionChanged: (e) => {
+
+                    if (e.selectedRowsData.length !== 0) {
+
+                        let data = e.selectedRowsData;
+
+                        $('#txtTipoId').val(data[0]._id);
+                        $('#txtTipoCodigo').val(data[0].codigo);
+                        $('#txtTipoDescripcion').val(data[0].descripcion);
+                        $('#myModal').modal('hide');
 
                     }
 
@@ -59,6 +101,8 @@
             });
 
             listarAhora();
+            listarAhoraTipoUsuarios();
+
 
         };
 
@@ -109,13 +153,23 @@
                 $('#txtNombre').val('');
                 $('#txtApellido').val('');
                 $('#txtEmail').val('');
-
+                $('#txtTipoId').val('');
+                $('#txtTipoCodigo').val('');
+                $('#txtTipoDescripcion').val('');
 
                 setTimeout(() => {
                     $('#txtNombre').focus();
-                }, 200)
+                }, 200);
 
             });
+
+            click('btnTipo', () => {
+
+                $('#myModal').modal({ backdrop: 'static', keyboard: false });
+                $("#gridListadoTipo").dxDataGrid("instance").clearSelection();
+                
+            });
+
 
             keyup('txtNombre', (e) => {
 
@@ -143,6 +197,8 @@
                 (e.keyCode === KEY.ESC) ? focus('txtEmail') : {};
 
             });
+
+
 
         };
 
