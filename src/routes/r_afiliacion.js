@@ -1,21 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const Usuario = require('../models/m_usuario');
+const Afiliacion = require('../models/m_afiliacion');
 
 
 router.get('/created', async (req, res) => {
 
     try {
 
-        var usu = new Usuario();
+        var usu = new Afiliacion();
         usu['codigo'] = "cantidad";
-        usu['nombre'] = req.query.nombre;
-        usu['apellido'] = req.query.apellido;
+        usu['nombres'] = req.query.nombres;
+        usu['apellidos'] = req.query.apellidos;
         usu['email'] = req.query.email;
-        usu['usuario_tipo'] = req.query.usuario_tipo;
+        usu['telefono_celular'] = req.query.telefono_celular;
         usu['estado'] = "A";
 
-        await Usuario.countDocuments(function (err, count) {
+        await Afiliacion.countDocuments(function (err, count) {
 
             usu['codigo'] = count + 1;;
 
@@ -23,14 +23,21 @@ router.get('/created', async (req, res) => {
 
 
         await usu.save();
-        res.send("El usuario se ha creado de manera exitosa");
+        res.send("Registro satisfactorio");
 
     } catch (error) {
 
-        //console.error(error);
-        res.send("Hubo un error " + error);
+        let mensaje = "Ya te registraste con ese correo";
+        if( error.code === 11000 ){
+            res.send( "" + mensaje + " : " + req.query.email );
+        }else{
+            res.send( "" + error.code );
+        }
+
+        
 
     }
+    
 
 });
 
@@ -43,7 +50,7 @@ router.get('/read', async (req, res) => {
 
 
 router.get('/update', async (req, res) => {
-
+    /*
     try {
 
         const doc = await Usuario.findOne({ _id: req.query._id });
@@ -63,11 +70,12 @@ router.get('/update', async (req, res) => {
         res.send("Hubo un error " + error);
 
     }
+    */
 });
 
 
 router.get('/delete', async (req, res) => {
-
+    /*
     try {
 
         const doc = await Usuario.findOne({ _id: req.query._id });
@@ -84,6 +92,7 @@ router.get('/delete', async (req, res) => {
         res.send("Hubo un error " + error);
         
     }
+    */
 });
 
 
@@ -102,9 +111,9 @@ router.get('/toList', async (req, res) => {
 
     try {
 
-        const usuarios = await Usuario.find({ estado: 'A' });
+        const afiliaciones = await Afiliacion.find({ estado: 'A' });
 
-        res.send({ usuarios });
+        res.send({ afiliaciones });
 
     } catch (error) {
 

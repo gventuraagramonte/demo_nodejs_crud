@@ -2,12 +2,18 @@ const express = require('express');
 const router = express.Router();
 
 
+router.get('/v_afiliacion', async (req, res) => {
+
+    res.render('v_afiliacion', null);
+
+});
+
+
 router.get('/v_articulos', async (req, res) => {
 
     res.render('v_articulos', null);
 
 });
-
 
 router.get('/v_clientes', async (req, res) => {
 

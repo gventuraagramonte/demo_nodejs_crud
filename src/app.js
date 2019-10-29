@@ -3,6 +3,7 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 
+const afiliacionRoutes = require('./routes/r_afiliacion');
 const usuarioRoutes = require('./routes/r_usuario');
 const usuario_tipoRoutes = require('./routes/r_usuario_tipo');
 const indexRoutes = require('./routes/r_index');
@@ -10,7 +11,7 @@ const indexRoutes = require('./routes/r_index');
 const app = express();
 
 // conn db
-mongoose.connect('mongodb://localhost/bd_compuciber')
+mongoose.connect('mongodb://192.168.86.50/examen')
     .then(db => console.log('Db connected'))
     .catch(err => console.log(err));
 
@@ -26,6 +27,7 @@ app.use('/image', express.static(__dirname + '/public/image'));
 
 
 // routes
+app.use('/afiliacion', afiliacionRoutes);
 app.use('/usuario_tipo', usuario_tipoRoutes);
 app.use('/usuario', usuarioRoutes);
 app.use('/index', indexRoutes);

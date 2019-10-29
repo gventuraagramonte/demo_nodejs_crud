@@ -15,7 +15,6 @@ router.get('/created', async (req, res) => {
         await UsuarioTipo.countDocuments(function (err, count) {
 
             usuTipo['codigo'] = count + 1;
-            console.log(usuTipo['codigo']);
 
         });
         await usuTipo.save();
