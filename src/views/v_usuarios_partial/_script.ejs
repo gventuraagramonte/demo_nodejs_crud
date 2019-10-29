@@ -1,0 +1,158 @@
+<script>
+
+    $(() => {
+
+        let listarAhora = () => {
+
+            listar("/usuario/toList", 'gridContainer', 'usuarios');
+
+        };
+
+        let leerFormulario = () => {
+
+            let usuario = {
+
+                '_id': $('#txtId').val(),
+                'codigo': $('#txtCodigo').val(),
+                'nombre': $('#txtNombre').val(),
+                'apellido': $('#txtApellido').val(),
+                'email': $('#txtEmail').val()
+
+            };
+
+            return usuario;
+
+        };
+
+        let inicio = () => {
+
+            $('#txtId').attr('disabled', 'disabled');
+            $('#txtCodigo').attr('disabled', 'disabled');
+
+            $("#gridContainer").dxDataGrid(dxDataGridModelo);
+            $("#gridContainer").dxDataGrid({
+
+                columns: [
+
+                    { dataField: 'id', visible: false },
+                    { dataField: 'codigo', dataType: "number", sortOrder: "desc" },
+                    { dataField: 'nombre' },
+                    { dataField: 'apellido' },
+                    { dataField: 'email' }
+
+                ],
+                onSelectionChanged: (e) => {
+
+                    if (e.selectedRowsData.length !== 0) {
+
+                        let data = e.selectedRowsData;
+
+                        $('#txtId').val(data[0]._id);
+                        $('#txtCodigo').val(data[0].codigo);
+                        $('#txtNombre').val(data[0].nombre);
+                        $('#txtApellido').val(data[0].apellido);
+                        $('#txtEmail').val(data[0].email);
+
+                    }
+
+                }
+            });
+
+            listarAhora();
+
+        };
+
+        let eventos = () => {
+
+            $('#btnGrabar').click(() => {
+
+                const usuario = leerFormulario();
+                let v_url = "";
+
+                if ($('#txtCodigo').val().trim() === '') {
+
+                    v_url = "/usuario/created";
+                    grabar(v_url, usuario, listarAhora, 'divMensaje');
+
+                } else {
+
+                    v_url = "/usuario/update";
+                    (confirm("¿Seguro que desea modificar?")) ? grabar(v_url, usuario, listarAhora, 'divMensaje') : {};
+
+                }
+
+                $('#btnLimpiar').click();
+
+            });
+
+            $('#btnEliminar').click(() => {
+
+                const usuario = leerFormulario();
+
+                if ($('#txtCodigo').val().trim() === '') {
+
+                    $('#divMensaje').html('Para poder eliminar, debe seleccionar algún elemento');
+
+                } else {
+
+                    (confirm("¿Seguro que desea eliminar?")) ? grabar("/usuario/delete", usuario, listarAhora, 'divMensaje') : {};
+
+                }
+
+                $('#btnLimpiar').click();
+
+            });
+
+            $('#btnLimpiar').click(() => {
+
+                $('#txtCodigo').val('');
+                $('#txtNombre').val('');
+                $('#txtApellido').val('');
+                $('#txtEmail').val('');
+
+
+                setTimeout(() => {
+                    $('#txtNombre').focus();
+                }, 200)
+
+            });
+
+            keyup('txtNombre', (e) => {
+
+                (e.keyCode === KEY.ENTER) ? focus('txtApellido') : {};
+                (e.keyCode === KEY.ESC) ? {} : {};
+
+            });
+
+            keyup('txtApellido', (e) => {
+
+                (e.keyCode === KEY.ENTER) ? focus('txtEmail') : {};
+                (e.keyCode === KEY.ESC) ? focus('txtNombre') : {};
+
+            });
+
+            keyup('txtEmail', (e) => {
+
+                (e.keyCode === KEY.ENTER) ? focus('btnGrabar') : {};
+                (e.keyCode === KEY.ESC) ? focus('txtApellido') : {};
+
+            });
+
+            keyup('btnGrabar', (e) => {
+
+                (e.keyCode === KEY.ESC) ? focus('txtEmail') : {};
+
+            });
+
+        };
+
+
+        //Ejcución de funciones
+        inicio();
+        eventos();
+
+
+    });
+
+
+</script>

@@ -1,126 +1,30 @@
+<% const v = '?v=1.000002'; %>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
-    <script src="/js/jquery-3.4.1.min.js" type="text/javascript"></script>
+    <% include v_index_partial/_header %>
 
-    <link href="/dx/css/dx.spa.css" rel="stylesheet" type="text/css" />
-    <link href="/dx/css/dx.common.css" rel="stylesheet" type="text/css" />
-    <link href="/dx/css/styles.css" rel="stylesheet" type="text/css" />
-    <link href="/dx/css/dx.softblue.css" rel="stylesheet" type="text/css" />
-    <!--
-        <link href="dx/css/dx.softblue.compact.css?x=0.00005" rel="stylesheet" type="text/css"/>
-        <link href="dx/css/dx.softblue.extracompact.css?x=0.00005" rel="stylesheet" type="text/css"/>
-       
-        -->
-
-    <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="/css/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="/css/responsive.bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-    <!--
-        <script src="dx/js/dx.all.js" type="text/javascript"></script>
-        -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.2/jszip.min.js"></script>
-    <script src="https://cdn3.devexpress.com/jslib/18.2.8/js/dx.all.js"></script>
-    <link href="/css/bootstrap.css" rel="stylesheet" type="text/css">
-    <link href="/css/style.css" rel="stylesheet" type="text/css">
-
-    <script src="/js/util.js<%='?v=1'%>" type="text/javascript"></script>
-
-    <title>Compuciber</title>
 </head>
 
 <body>
 
-    <nav class="navbar navbar-inverse">
-        <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">COMPUCIBER</a>
-            </div>
+    <% include v_index_partial/_nav %>
 
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
+    <hr />
+   
 
-                    <li><a id="lnkArticulos" href="#">Artículos</a></li>
-                    <li><a id="lnkClientes" href="#">Clientes</a></li>
-                    <li><a id="lnkProveedores" href="#">Proveedores</a></li>
-                    <li><a id="lnkUsuarios" href="#">Usuarios</a></li>
+    <section id="divSection" class="container"></section>
 
-                </ul>
+    <% include v_index_partial/_script %>
 
-            </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
-    </nav>
+    <br>
+    <br>
+    <br>
 
-    <div id="divCuerpo" class="container">
-    </div>
-
-    <script>
-
-        $('#lnkArticulos').click(() => {
-            $.ajax({
-                url: "http://localhost:3000/index/v_articulos",
-                async: true,
-                success: function (result) {
-                    $('#divCuerpo').html(result);
-                },
-                error: function (e) {
-                    console.error(e);
-                },
-                timeout: 0
-            });
-        });
-        $('#lnkUsuarios').click(() => {
-            $.ajax({
-                url: "http://localhost:3000/index/v_usuarios",
-                async: true,
-                success: function (result) {
-                    $('#divCuerpo').html(result);
-                },
-                error: function (e) {
-                    console.error(e);
-                },
-                timeout: 0
-            });
-        });
-        $('#lnkClientes').click(() => {
-            $.ajax({
-                url: "http://localhost:3000/index/v_clientes",
-                async: true,
-                success: function (result) {
-                    $('#divCuerpo').html(result);
-                },
-                error: function (e) {
-                    console.error(e);
-                },
-                timeout: 0
-            });
-        });
-        $('#lnkProveedores').click(() => {
-            $.ajax({
-                url: "http://localhost:3000/index/v_proveedores",
-                async: true,
-                success: function (result) {
-                    $('#divCuerpo').html(result);
-                },
-                error: function (e) {
-                    console.error(e);
-                },
-                timeout: 0
-            });
-        });
-
-    </script>
+    <% include v_index_partial/_footer %>
 
 </body>
 
