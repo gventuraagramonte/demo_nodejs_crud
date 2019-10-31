@@ -11,7 +11,7 @@ const indexRoutes = require('./routes/r_index');
 const app = express();
 
 // conn db
-mongoose.connect('mongodb://192.168.86.50/examen')
+mongoose.connect('mongodb://localhost/examen')
     .then(db => console.log('Db connected'))
     .catch(err => console.log(err));
 
